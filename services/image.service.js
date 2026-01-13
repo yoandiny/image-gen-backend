@@ -32,7 +32,7 @@ export const generateImageFromText = async (data) => {
     messages: [
       {
         role: 'user',
-        content: 'Generate a beautiful sunset over mountains',
+        content: prompt,
       },
     ],
     modalities: ['image', 'text'],
