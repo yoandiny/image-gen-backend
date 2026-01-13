@@ -49,6 +49,7 @@ if (result.choices) {
       const imageUrl = image.image_url.url.split(',')[1]; // Base64 data URL
       console.log(`Generated image URL: ${imageUrl.substring(0, 50)}...`);
       const filePath = path.join(process.cwd(), 'generated_image.png');
+      console.log(`Saving image to: ${filePath}`);
       fs.writeFileSync(filePath, Buffer.from(imageUrl, 'base64'));
 
       return filePath;
