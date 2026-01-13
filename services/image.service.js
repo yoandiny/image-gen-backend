@@ -46,6 +46,7 @@ if (result.choices) {
   const message = result.choices[0].message;
   if (message.images) {
     const image = message.images[0];
+    console.log('Generated image:', image);
       const imageUrl = image.image_url.url.split(',').pop(); // Base64 data URL
       console.log(`Generated image URL: ${imageUrl.substring(0, 50)}...`);
       const buffer = Buffer.from(imageUrl, 'base64');
