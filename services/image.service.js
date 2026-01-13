@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 import axios from 'axios';
 const client = new OpenAI();
+import fs from 'fs';
+import path from 'path';
 
 
 
@@ -46,7 +48,10 @@ if (result.choices) {
     const image = message.images[0];
       const imageUrl = image.image_url.url.split(',').pop(); // Base64 data URL
       console.log(`Generated image URL: ${imageUrl.substring(0, 50)}...`);
-      return imageUrl;
+      const filePath = path.join(process.cwd(), 'generated_image.png');
+      fs.writeFileSync(filePath, Buffer.from(imageBase64, 'base64'));
+
+      return filePath;
 
   }
 }
