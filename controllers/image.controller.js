@@ -7,7 +7,6 @@ export const ImageToTextController = async (req, res) => {
   try {
     const response = await generateImageFromText({ prompt, negativePrompt, style });
     res.status(200);
-    res.type("png");
     res.send(response);
     
   } catch (error) {
