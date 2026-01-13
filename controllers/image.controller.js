@@ -6,11 +6,12 @@ export const ImageToTextController = async (req, res) => {
 
   try {
     const response = await generateImageFromText({ prompt, negativePrompt, style });
-    res.writeHead(200, {
+    res.set(200, {
       "Content-Type": "image/png",      // type MIME pour le front
       "Content-Length": response.length,
     });
-    res.end(response);
+    res.send(response);
+    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'An error occurred' });
