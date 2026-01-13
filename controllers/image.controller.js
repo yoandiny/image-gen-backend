@@ -6,7 +6,7 @@ export const ImageToTextController = async (req, res) => {
 
   try {
     const response = await generateImageFromText({ prompt, negativePrompt, style });
-    res.status(200).res.writeHead(200, {
+    res.writeHead(200, {
       "Content-Type": "image/png",      // type MIME pour le front
       "Content-Length": response.length,
     });
