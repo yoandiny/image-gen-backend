@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    container_name: yo_backend
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}" # map le port défini dans le .env
+    restart: unless-stopped
