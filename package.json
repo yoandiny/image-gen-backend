@@ -18,10 +18,16 @@
   "type": "module",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node -r dotenv/config server.js",
+    "dev": "node --watch -r dotenv/config server.js"
   },
   "dependencies": {
+    "@openrouter/sdk": "^0.3.12",
+    "axios": "^1.13.2",
     "cors": "^2.8.5",
-    "express": "^5.2.1"
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "openai": "^6.16.0"
   }
 }
