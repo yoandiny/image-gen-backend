@@ -8,7 +8,6 @@ export const ImageToTextController = async (req, res) => {
     const response = await generateImageFromText({ prompt, negativePrompt, style });
     res.set(200, {
       "Content-Type": "image/png",      // type MIME pour le front
-      "Content-Length": response.length,
     });
     res.send(response);
     
