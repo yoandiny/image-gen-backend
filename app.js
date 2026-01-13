@@ -7,7 +7,7 @@ import imageRoutes from './routes/image.routes.js';
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: '*' }));
 
 console.log("Mounting image routes");
 app.use('/api', imageRoutes);
