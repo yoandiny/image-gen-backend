@@ -81,9 +81,7 @@ if (result.choices) {
 export const generateImageFromImage = async (data) => {
   const userInfo = data.user;
 
-  if (!userInfo?.id) {
-    throw new Error("User not authenticated");
-  }
+ console.log(userInfo);
 
   if (!data.image) {
     throw new Error("No image provided");
