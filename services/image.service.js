@@ -113,9 +113,9 @@ export const generateImageFromImage = async (data) => {
     messages: [
       {
         role: 'user',
-        content: prompt,
-      },
-      {
+        content: [
+          prompt,
+          {
          
           "type": "image_url",
           "image_url": {
@@ -123,6 +123,9 @@ export const generateImageFromImage = async (data) => {
           }
         
       }
+        ] 
+      },
+      
     ],
     modalities: ['image', 'text'],
   }),
