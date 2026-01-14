@@ -46,7 +46,7 @@ export const generateImageFromText = async (data) => {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    model: 'sourceful/riverflow-v2-fast-preview',
+    model: 'openai/gpt-5-image-mini',
     messages: [
       {
         role: 'user',
