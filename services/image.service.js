@@ -1,7 +1,6 @@
 import OpenAI from "openai";
 import axios from 'axios';
 const client = new OpenAI();
-import jwt from "jsonwebtoken";
 import pool from "../config/db.js";
 
 
@@ -17,9 +16,10 @@ const boostPrompt = async({prompt, negativePrompt, style}) => {
 }
 
 export const generateImageFromText = async (data) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader.split(' ')[1];
-  const userInfo = jwt.decode(token, process.env.JWT_SECRET);
+  if (!user?.id) {
+    throw new Error("User not authenticated");
+  }
+  const userInfo = data.user;
   const checkGenNumber = await pool.query(`SELECT counter from image_count WHERE id=$1`, [userInfo.id]);
 
   if (checkGenNumber.rows.length > 0) {

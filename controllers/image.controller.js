@@ -5,7 +5,7 @@ export const ImageToTextController = async (req, res) => {
   const { prompt, negativePrompt, style } = req.body;
 
   try {
-    const response = await generateImageFromText({ prompt, negativePrompt, style });
+    const response = await generateImageFromText({ prompt, negativePrompt, style, user: req.user });
     res.status(200);
     res.send(response);
     
