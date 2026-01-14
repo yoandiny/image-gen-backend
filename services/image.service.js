@@ -2,7 +2,7 @@ import OpenAI from "openai";
 import axios from 'axios';
 const client = new OpenAI();
 import jwt from "jsonwebtoken";
-import pool from "../config/db";
+import pool from "../config/db.js";
 
 
 
