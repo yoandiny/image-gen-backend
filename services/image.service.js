@@ -124,7 +124,7 @@ export const generateImageFromImage = async (data) => {
          
           "type": "image_url",
           "image_url": {
-            "url": data.image
+            "url": cleanedImage
           }
         
       }
