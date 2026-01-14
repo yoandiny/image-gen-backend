@@ -132,8 +132,16 @@ export const generateImageFromImage = async (data) => {
         ]
       }
     ]
+    
   
+},
+{
+    headers: {
+      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
 }
+
 );
 
 const result = await response.json();
