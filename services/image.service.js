@@ -87,10 +87,7 @@ export const generateImageFromImage = async (data) => {
   }
 
   // Récupère uniquement la partie base64 si c'est un Data URL
-  const base64Image = data.image.includes('base64,')
-    ? data.image.split(',').pop()
-    : data.image;
-  const dataUrl = `data:image/png;base64,${base64Image}`;
+  const base64Image = data.image
   console.log(`Base64 Image: ${base64Image.substring(0, 50)}...`);
 
   // Vérification limite génération
@@ -124,7 +121,7 @@ export const generateImageFromImage = async (data) => {
           {
             type: 'image_url',
             imageUrl: {
-              url: dataUrl, // Data URL base64
+              url: base64Image, // Data URL base64
             },
           },
         ],
