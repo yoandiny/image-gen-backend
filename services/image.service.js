@@ -111,7 +111,7 @@ export const generateImageFromImage = async (data) => {
   console.log('Prompt:', prompt);
 
   // Envoi à OpenRouter
-  const response = await openRouter.chat.send({
+  const result = await openRouter.chat.send({
     model: 'openai/gpt-5-image-mini',
     messages: [
       {
@@ -133,16 +133,15 @@ export const generateImageFromImage = async (data) => {
     stream: false,
   });
 
-  const result = await response.json();
   console.log('Result:', result);
 
+  // Extraction de l'image générée
   if (result.choices?.length > 0) {
     const message = result.choices[0].message;
     if (message.images?.length > 0) {
-      const image = message.images[0];
-      const imageBase64 = image.image_url?.url?.split(',').pop(); // si renvoyé en base64
-      if (!imageBase64) throw new Error("No image returned from API");
-      const buffer = Buffer.from(imageBase64, 'base64');
+      const generatedBase64 = message.images[0].image_url?.url.split(',').pop();
+      if (!generatedBase64) throw new Error("No image returned from API");
+      const buffer = Buffer.from(generatedBase64, 'base64');
       return buffer;
     }
   }
