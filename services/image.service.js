@@ -115,6 +115,7 @@ export const generateImageFromImage = async (data) => {
   'https://openrouter.ai/api/v1/chat/completions',
   {
   "model": "openai/gpt-5-image-mini",
+  "modalities": ['image', 'text'],
   "messages": [
       {
         "role": "user",
@@ -148,21 +149,17 @@ const result = await response.data;
 console.log('Result:', result);
 
 // The generated image will be in the assistant message
-if (result.choices && result.choices.length > 0) {
+if (result.choices) {
   const message = result.choices[0].message;
-  if (message.image_url) {
-    const imageUrl = message.image_url.url; // C'est déjà une URL ou base64
-    console.log('Generated image URL:', imageUrl);
+  if (message.images) {
+    const image = message.images[0];
+    console.log('Generated image:', image);
+      const imageUrl = image.image_url.url.split(',').pop(); // Base64 data URL
+      console.log(`Generated image URL: ${imageUrl.substring(0, 50)}...`);
+      const buffer = Buffer.from(imageUrl, 'base64');
 
-    // Si c'est du base64, on peut le convertir en buffer
-    if (imageUrl.startsWith('data:image')) {
-      const base64Data = imageUrl.split(',')[1];
-      const buffer = Buffer.from(base64Data, 'base64');
       return buffer;
-    } else {
-      // Sinon, c'est juste une URL vers l'image hébergée
-      return imageUrl;
-    }
+
   }
 }
 
