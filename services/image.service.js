@@ -16,10 +16,11 @@ const boostPrompt = async({prompt, negativePrompt, style}) => {
 }
 
 export const generateImageFromText = async (data) => {
-  if (!user?.id) {
+  const userInfo = data.user;
+  if (!userInfo?.id) {
     throw new Error("User not authenticated");
   }
-  const userInfo = data.user;
+  
   const checkGenNumber = await pool.query(`SELECT counter from image_count WHERE id=$1`, [userInfo.id]);
 
   if (checkGenNumber.rows.length > 0) {
