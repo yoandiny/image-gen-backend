@@ -107,30 +107,34 @@ export const generateImageFromImage = async (data) => {
   const prompt = await boostPrompt(data);
   console.log('Prompt', prompt);
 
-  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-   body: JSON.stringify({
-  model: 'openai/gpt-5-image-mini',
-  messages: [
+  const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', 
+    
     {
-      role: 'user',
-      content: prompt, // ton texte ici
+  "model": "openai/gpt-5-image-mini",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": `${prompt}`
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": `data:image/png;base64,${base64Image}`
+          }
+        }
+      ]
     }
   ],
-  input_image: [
-    {
-      type: "image_base64",
-      image_base64: base64Image
-    }
-  ],
-  modalities: ['image', 'text'],
-})
-,
-  });
+  "modalities": [
+    "image",
+    "text"
+  ]
+}
+    
+  )
 
   const result = await response.json();
   console.log('Result:', result);
