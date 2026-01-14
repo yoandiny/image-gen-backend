@@ -45,7 +45,7 @@ export const generateImageFromText = async (data) => {
     'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    model: 'google/gemini-2.5-flash-image-preview',
+    model: 'sourceful/riverflow-v2-fast-preview',
     messages: [
       {
         role: 'user',
