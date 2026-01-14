@@ -87,9 +87,9 @@ export const generateImageFromImage = async (data) => {
   if (!data.image) {
     throw new Error("No image provided");
   }
-  const cleanedImage = data.image.split(',').pop(); // Base64 data URL
-  console.log(`Image URL: ${cleanedImage.substring(0, 50)}...`);
-  console.log(`Image URL: ${data.image.substring(0, 50)}...`);
+ // On récupère uniquement la partie base64
+  const base64Image = data.image.split(',').pop();
+  console.log(`Base64 Image: ${base64Image.substring(0, 50)}...`);
 
   
   const checkGenNumber = await pool.query(`SELECT counter from image_count WHERE id=$1`, [userInfo.id]);
@@ -125,10 +125,8 @@ export const generateImageFromImage = async (data) => {
           prompt,
           {
          
-          "type": "image_url",
-          "image_url": {
-            "url": data.image
-          }
+          type: "image_base64", // <-- ici on change le type
+          image_base64: base64Image
         
       }
         ] 
