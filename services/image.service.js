@@ -1,9 +1,11 @@
 import OpenAI from "openai";
-import axios from 'axios';
+import { OpenRouter } from '@openrouter/sdk';
 const client = new OpenAI();
 import pool from "../config/db.js";
 
-
+const openRouter = new OpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 
 const boostPrompt = async({prompt, negativePrompt, style}) => {
@@ -81,14 +83,19 @@ if (result.choices) {
 export const generateImageFromImage = async (data) => {
   const userInfo = data.user;
 
- console.log(userInfo);
+  if (!userInfo?.id) {
+    throw new Error("User not authenticated");
+  }
 
   if (!data.image) {
     throw new Error("No image provided");
   }
 
-  // On récupère uniquement la partie base64
-  const base64Image = data.image.split(',').pop();
+  // Récupère uniquement la partie base64 si c'est un Data URL
+  const base64Image = data.image.includes('base64,')
+    ? data.image.split(',').pop()
+    : data.image;
+  const dataUrl = `data:image/png;base64,${base64Image}`;
   console.log(`Base64 Image: ${base64Image.substring(0, 50)}...`);
 
   // Vérification limite génération
@@ -104,37 +111,32 @@ export const generateImageFromImage = async (data) => {
     }
   }
 
+  // Générer le prompt boosté
   const prompt = await boostPrompt(data);
-  console.log('Prompt', prompt);
+  console.log('Prompt:', prompt);
 
-  const response = await axios.post('https://openrouter.ai/api/v1/chat/completions', 
-    
-    {
-  "model": "openai/gpt-5-image-mini",
-  "messages": [
-    {
-      "role": "user",
-      "content": [
-        {
-          "type": "text",
-          "text": `${prompt}`
-        },
-        {
-          "type": "image_url",
-          "image_url": {
-            "url": `data:image/png;base64,${base64Image}`
-          }
-        }
-      ]
-    }
-  ],
-  "modalities": [
-    "image",
-    "text"
-  ]
-}
-    
-  )
+  // Envoi à OpenRouter
+  const response = await openRouter.chat.send({
+    model: 'openai/gpt-5-image-mini',
+    messages: [
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            text: prompt,
+          },
+          {
+            type: 'image_url',
+            imageUrl: {
+              url: dataUrl, // Data URL base64
+            },
+          },
+        ],
+      },
+    ],
+    stream: false,
+  });
 
   const result = await response.json();
   console.log('Result:', result);
