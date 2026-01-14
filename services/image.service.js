@@ -28,7 +28,7 @@ export const generateImageFromText = async (data) => {
     if(!genNumber) {
       await pool.query(`INSERT INTO image_count (id, counter) VALUES ($1, $2)`, [userInfo.id, 1]);
     }
-    if (genNumber <= 150) {
+    if (genNumber >= 150) {
       throw new Error('Image generation limit reached');
       
     } else {
