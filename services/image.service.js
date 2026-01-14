@@ -110,40 +110,41 @@ export const generateImageFromImage = async (data) => {
   console.log('Prompt:', prompt);
 
   // Envoi à OpenRouter
-  const result = await openRouter.chat.send({
+  const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+  method: 'POST',
+  headers: {
+    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
     model: 'openai/gpt-5-image-mini',
     messages: [
       {
-        "role": 'user',
-        "content": [
-          {
-            "type": 'text',
-            "text": prompt,
-          },
-          {
-            "type": 'image_url',
-            "image_url": {
-              "url": image,
-            },
-          },
-        ],
+        role: 'user',
+        content: [prompt, { type: 'image_url', url: image }],
       },
     ],
-    stream: false,
-  });
+    modalities: ['image', 'text'],
+  }),
+});
 
-  console.log('Result:', result);
+const result = await response.json();
+console.log('Result:', result);
 
-  // Extraction de l'image générée
-  if (result.choices?.length > 0) {
-    const message = result.choices[0].message;
-    if (message.images?.length > 0) {
-      const generatedBase64 = message.images[0].image_url?.url.split(',').pop();
-      if (!generatedBase64) throw new Error("No image returned from API");
-      const buffer = Buffer.from(generatedBase64, 'base64');
+// The generated image will be in the assistant message
+if (result.choices) {
+  const message = result.choices[0].message;
+  if (message.images) {
+    const image = message.images[0];
+    console.log('Generated image:', image);
+      const imageUrl = image.image_url.url.split(',').pop(); // Base64 data URL
+      console.log(`Generated image URL: ${imageUrl.substring(0, 50)}...`);
+      const buffer = Buffer.from(imageUrl, 'base64');
+
       return buffer;
-    }
+
   }
+}
 
   throw new Error("No image generated");
 };
