@@ -9,13 +9,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log('ENV CHECK', {
-  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
-  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
-});
-
-
 export async function uploadBase64ImageToCloudinary(base64Image) {
   if (!base64Image || typeof base64Image !== 'string') {
     throw new Error('Base64 image is required');

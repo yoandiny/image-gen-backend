@@ -114,16 +114,16 @@ export const generateImageFromImage = async (data) => {
     model: 'openai/gpt-5-image-mini',
     messages: [
       {
-        role: 'user',
-        content: [
+        "role": 'user',
+        "content": [
           {
-            type: 'text',
-            text: prompt,
+            "type": 'text',
+            "text": prompt,
           },
           {
-            type: 'image_url',
-            imageUrl: {
-              url: image,
+            "type": 'image_url',
+            "image_url": {
+              "url": image,
             },
           },
         ],
