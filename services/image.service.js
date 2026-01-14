@@ -83,6 +83,10 @@ export const generateImageFromImage = async (data) => {
   if (!userInfo?.id) {
     throw new Error("User not authenticated");
   }
+
+  if (!data.image) {
+    throw new Error("No image provided");
+  }
   
   const checkGenNumber = await pool.query(`SELECT counter from image_count WHERE id=$1`, [userInfo.id]);
 
