@@ -1,8 +1,8 @@
 import OpenAI from "openai";
 import axios from 'axios';
 const client = new OpenAI();
-import fs from 'fs';
-import path from 'path';
+import jwt from "jsonwebtoken";
+import pool from "../config/db";
 
 
 
@@ -17,6 +17,23 @@ const boostPrompt = async({prompt, negativePrompt, style}) => {
 }
 
 export const generateImageFromText = async (data) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader.split(' ')[1];
+  const userInfo = jwt.decode(token, process.env.JWT_SECRET);
+  const checkGenNumber = await pool.query(`SELECT counter from image_count WHERE id=$1`, [userInfo.id]);
+
+  if (checkGenNumber.rows.length > 0) {
+    const genNumber = checkGenNumber.rows[0].counter;
+    if(!genNumber) {
+      await pool.query(`INSERT INTO image_count (id, counter) VALUES ($1, $2)`, [userInfo.id, 1]);
+    }
+    if (genNumber <= 150) {
+      throw new Error('Image generation limit reached');
+      
+    } else {
+      await pool.query(`UPDATE image_count SET counter = counter + 1 WHERE id=$1`, [userInfo.id]);
+    }
+  }
 
   const prompt = await boostPrompt(data);
   console.log('Prompt', prompt);
@@ -40,6 +57,7 @@ export const generateImageFromText = async (data) => {
 });
 
 const result = await response.json();
+console.log('Result:', result);
 
 // The generated image will be in the assistant message
 if (result.choices) {
