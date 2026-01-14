@@ -2,6 +2,7 @@ import OpenAI from "openai";
 import { OpenRouter } from '@openrouter/sdk';
 const client = new OpenAI();
 import pool from "../config/db.js";
+import { uploadBase64ImageToCloudinary } from "../config/cloudinary.js";
 
 const openRouter = new OpenRouter({
   apiKey: process.env.OPENROUTER_API_KEY,
@@ -88,7 +89,8 @@ export const generateImageFromImage = async (data) => {
 
   // Récupère uniquement la partie base64 si c'est un Data URL
   const base64Image = data.image
-  console.log(`Base64 Image: ${base64Image.substring(0, 50)}...`);
+  const image = await uploadBase64ImageToCloudinary(base64Image);
+  console.log('Uploaded image URL:', image);
 
   // Vérification limite génération
   const checkGenNumber = await pool.query(`SELECT counter FROM image_count WHERE id=$1`, [userInfo.id]);
@@ -121,7 +123,7 @@ export const generateImageFromImage = async (data) => {
           {
             type: 'image_url',
             imageUrl: {
-              url: base64Image, // Data URL base64
+              url: image,
             },
           },
         ],
