@@ -113,17 +113,23 @@ export const generateImageFromImage = async (data) => {
       Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      model: 'openai/gpt-5-image-mini',
-      input: prompt,              // Prompt texte uniquement
-      input_image: [              // Image base64 séparée
-        {
-          type: "image_base64",
-          image_base64: base64Image
-        }
-      ],
-      modalities: ['image', 'text'],
-    }),
+   body: JSON.stringify({
+  model: 'openai/gpt-5-image-mini',
+  messages: [
+    {
+      role: 'user',
+      content: prompt, // ton texte ici
+    }
+  ],
+  input_image: [
+    {
+      type: "image_base64",
+      image_base64: base64Image
+    }
+  ],
+  modalities: ['image', 'text'],
+})
+,
   });
 
   const result = await response.json();
