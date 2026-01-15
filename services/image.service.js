@@ -114,7 +114,7 @@ export const generateImageFromImage = async (data) => {
   const response = await axios.post(
   'https://openrouter.ai/api/v1/chat/completions',
   {
-  "model": "sourceful/riverflow-v2-fast-preview",
+  "model": "black-forest-labs/flux.2-klein-4b",
   "modalities": ['image', 'text'],
   "messages": [
       {
