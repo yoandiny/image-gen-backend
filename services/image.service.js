@@ -114,7 +114,7 @@ export const generateImageFromImage = async (data) => {
   const response = await axios.post(
   'https://openrouter.ai/api/v1/chat/completions',
   {
-  "model": "bytedance-seed/seedream-4.5",
+  "model": "google/gemini-2.5-flash-image",
   "modalities": ['image', 'text'],
   "messages": [
       {
