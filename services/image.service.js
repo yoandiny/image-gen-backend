@@ -114,7 +114,7 @@ export const generateImageFromImage = async (data) => {
   const response = await axios.post(
   'https://openrouter.ai/api/v1/chat/completions',
   {
-  "model": "black-forest-labs/flux.2-pro",
+  "model": "openai/gpt-5-image-mini",
   "modalities": ['image', 'text'],
   "messages": [
       {
